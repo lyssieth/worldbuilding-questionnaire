@@ -4,4 +4,4 @@ The purpose of this website is to act as a questionnaire for worldbuilding purpo
 
 ## Current State
 
-Extremely PoC. [Demo hosted by GitHub pages TBA]
+Extremely PoC. [Demo hosted by GitHub pages](https://lyssieth.github.io/worldbuilding-questionnaire/)
