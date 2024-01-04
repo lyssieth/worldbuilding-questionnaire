@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "fixup": "sed -e 's/=\"\\//=\"/' -i '' dist/index.html"
+    "fixup": "sed -e 's/=\"\\//=\"/' -i dist/index.html"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
