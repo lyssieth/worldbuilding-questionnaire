@@ -1,8 +1,15 @@
 <script lang="ts">
-  export let question: string;
-  export let placeholder: string | undefined = undefined;
-  export let type: "textarea" | "number" | "text" = "textarea";
-  export let length: "short" | "medium" | "long" = "medium";
+  import QuestionTitle from "./QuestionTitle.svelte";
+  import type { TemplateQuestion } from "./template";
+
+  export let question: TemplateQuestion;
+  export let questionChanged: (
+    question: TemplateQuestion,
+    hasValue: boolean
+  ) => void;
+
+  let changed = false;
+  const { type, placeholder } = question;
 
   const cols = {
     short: 60,
@@ -15,22 +22,52 @@
     medium: 8,
     long: 16,
   };
+
+  function onChange(evt: Event) {
+    const el = evt.target as HTMLInputElement | HTMLTextAreaElement;
+
+    if (el.value.length === 0) {
+      changed = false;
+      questionChanged(question, false);
+      return;
+    }
+
+    changed = true;
+    questionChanged(question, true);
+  }
 </script>
 
-<li class="question">
+<li class="question" data-question={question.question}>
   <label>
-    <span class="question-text">{question}</span>
+    <QuestionTitle {changed}>{question.question}</QuestionTitle>
     {#if type === "textarea"}
+      {@const { length } = question}
       <textarea
+        data-flub={question.placeholder}
+        on:change={onChange}
         class="answer"
-        rows={rows[length]}
-        cols={cols[length]}
+        rows={rows[length ?? "medium"]}
+        cols={cols[length ?? "medium"]}
         {placeholder}
       />
     {:else if type === "number"}
-      <input class="answer" type="number" {placeholder} />
+      <input
+        data-flub={question.placeholder}
+        on:change={onChange}
+        class="answer"
+        type="number"
+        {placeholder}
+      />
     {:else if type === "text"}
-      <input class="answer" type="text" {placeholder} />
+      {@const { length } = question}
+      <input
+        data-flub={question.placeholder}
+        on:change={onChange}
+        class="answer"
+        type="text"
+        {placeholder}
+        data-length={length ?? "medium"}
+      />
     {/if}
   </label>
 </li>
@@ -40,19 +77,25 @@
     margin-bottom: 1em;
   }
 
-  .question-text {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.5em;
-  }
-
   input {
     display: block;
     width: 100%;
   }
 
   input[type="number"] {
-    width: 5em;
+    width: 50%;
+  }
+
+  input[type="text"][data-length="short"] {
+    width: 40%;
+  }
+
+  input[type="text"][data-length="medium"] {
+    width: 60%;
+  }
+
+  input[type="text"][data-length="long"] {
+    width: 80%;
   }
 
   label {

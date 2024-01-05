@@ -1,38 +1,101 @@
 <script lang="ts">
-  import Question from "./lib/Question.svelte";
-  import QuestionList from "./lib/QuestionList.svelte";
+  import Controls from "./lib/Controls.svelte";
+  import Questionnaire from "./lib/Questionnaire.svelte";
+  import ScrollButton from "./lib/ScrollButton.svelte";
+  import { state } from "./lib/store";
+  import { type Template } from "./lib/template";
 
+  let exportBlock: HTMLTextAreaElement;
   function exportQuestions() {
-    const exportBlock = document.getElementById(
-      "export"
-    ) as HTMLTextAreaElement;
-    const questionLists = document.querySelectorAll(".question-block");
-    console.debug({ questionLists });
-    const exportText = Array.from(questionLists)
-      .map((questionList) => {
-        const listTitle =
-          questionList.querySelector(".list-title")?.textContent;
-        const questions = questionList.querySelectorAll(".question");
+    const sections = document.querySelectorAll(".section");
+    console.debug({ sections });
+    const exportText = Array.from(sections)
+      .map((section) => {
+        const sectionTitle = section.getAttribute("data-section");
+        const sectionDescription = section.querySelector(
+          ".section-description"
+        )?.textContent;
+        const questions = section.querySelectorAll(".question");
         console.debug({ questions });
 
         const questionTexts = Array.from(questions)
           .map((question) => {
-            const questionText =
-              question.querySelector(".question-text")?.textContent;
+            const questionText = question.getAttribute("data-question");
             const answerEl: HTMLInputElement | HTMLTextAreaElement | null =
               question.querySelector(".answer");
             const answer = answerEl?.value;
 
             console.debug({ questionText, answer });
-            return `## ${questionText}\n${answer}`;
+            if (answer) {
+              return `## ${questionText}\n${answer}`;
+            } else {
+              return null;
+            }
           })
           .join("\n");
 
-        return `# ${listTitle}\n${questionTexts}`;
+        console.debug({ questionTexts });
+
+        if (questionTexts.trim().length > 0) {
+          return `# ${sectionTitle}\n${sectionDescription}\n${questionTexts}`;
+        } else {
+          return null;
+        }
       })
       .join("\n\n");
-    exportBlock.value = exportText;
+
+    if (exportText.trim().length > 0) {
+      exportBlock.value = exportText;
+    } else {
+      exportBlock.value = "";
+    }
   }
+
+  let changed: boolean = false;
+  let questionnaire: Questionnaire;
+
+  function onTemplateChange(template: Template) {
+    if ($state.current && changed) {
+      const current = $state.current;
+      const confirm = window.confirm(
+        "You have unsaved changes. Are you sure you want to change templates?"
+      );
+
+      if (!confirm) {
+        const el = document.getElementById(
+          "templateSelect"
+        ) as HTMLSelectElement;
+
+        el.value = current.name;
+
+        return;
+      }
+    }
+
+    $state.current = template;
+    changed = false;
+
+    // can't trust the urls of other people sadly. sorry ;;
+    if (template.author instanceof Object) {
+      if (
+        template.author.name !== "lys" &&
+        template.author.url !== "https://lys.ee/contact"
+      ) {
+        $state.current.author = template.author.name;
+      }
+    }
+
+    exportBlock.value = "";
+  }
+
+  window.addEventListener("beforeunload", (e) => {
+    if (changed) {
+      const confirm = "Are you sure you want to leave?";
+      e.preventDefault();
+      e.returnValue = confirm;
+      return confirm;
+    }
+  });
 </script>
 
 <main>
@@ -41,76 +104,63 @@
   <h2>What is this?</h2>
   <p>
     The purpose of this website is to act as a questionnaire for worldbuilding
-    purposes. This is an experiment just for characters. If this experiment
-    works, I intend to expand it to support more. This is currently just a proof
-    of concept/prototype. As well as just more than characters, I want
-    custom/editable questions and more.
+    purposes. This is v2 of the experiment, where I've added templates for
+    different things one might want to build, automatic generation of sections,
+    and collapsible sections. There is also change tracking for the sections, so
+    changing the template can't break things.
   </p>
 
   <p>
     This is a work in progress. If you have any suggestions, please leave an
-    issue on <a href="https://github.com/lyssieth/worldbuilding-questionnaire"
+    issue on <a
+      href="https://github.com/lyssieth/worldbuilding-questionnaire"
+      title="A link to the project's version management site, GitHub."
       >the github</a
     >, or contact me
-    <a href="https://lys.ee/contact">on one of these places I exist on</a>.
+    <a href="https://lys.ee/contact" title="My contact page"
+      >on one of these places I exist on</a
+    >.
   </p>
   <hr />
-  <h2>The Questionnaire Itself</h2>
-  <QuestionList title="Basic Personal Info">
-    <Question
-      question="What is their name? Does it have a meaning?"
-      placeholder="Vixie, derived from 'Vixen' meaning 'fox'"
-    />
-    <Question
-      question="Do they have a nickname, and if so, what is its origin?"
-      placeholder="Vix; it's just a shortening with no meaningful origin."
-    />
-    <Question question="What is their age?" placeholder="18" type="number" />
-    <Question question="Where were they born?" placeholder="The Forest" />
-  </QuestionList>
-  <QuestionList title="Physical Appearance">
-    <Question
-      question="What is their height?"
-      placeholder="180cm"
-      type="text"
-    />
-    <Question question="What is their weight?" placeholder="60kg" type="text" />
-    <Question
-      question="What is their build?"
-      placeholder="Slim, but not skinny"
-      length="short"
-    />
-    <Question
-      question="What is their hair like?"
-      placeholder="Long, red"
-      length="short"
-    />
-    <Question
-      question="What is their eye colour?"
-      placeholder="Green"
-      length="short"
-    />
-  </QuestionList>
-  <QuestionList title="Personality / Beliefs">
-    <Question question="What is their way of speaking?" />
-    <Question
-      question="What are their views/ideas on religion?"
-      length="long"
-    />
-    <Question
-      question="What are their views/ideas on politics?"
-      length="long"
-    />
-  </QuestionList>
 
-  <h2>Export Block</h2>
+  <div id="questionnaire">
+    <Controls {onTemplateChange} />
+    {#if $state.current}
+      <Questionnaire
+        bind:this={questionnaire}
+        bind:changed
+        current={$state.current}
+      />
+    {:else}
+      <p>There is currently no template selected. Select one above.</p>
+    {/if}
+  </div>
+
+  <hr />
   <p>
-    This textarea contains the above questionnaire as markdown formatted text.
-    Click 'Refresh' to refresh it.
+    This text area is meant for exporting the questions and their answers. It
+    currently exports as a very very basic <a
+      href="https://en.wikipedia.org/wiki/Markdown"
+      title="markdown wikipedia page">markdown-formatted</a
+    > chunk.
   </p>
-  <!-- Shouldn't allow typing, but should allow selecting/etc -->
-  <textarea rows="25" cols="150" id="export" readonly /><br />
-  <button on:click={exportQuestions}>Refresh</button>
+  <p>
+    Empty questions won't get exported, so you can leave any unapplicable
+    questions empty, and they won't show up. Same goes for sections.
+  </p>
 
+  <button on:click={exportQuestions} disabled={state == null}>Refresh</button
+  ><br />
+  <textarea
+    bind:this={exportBlock}
+    rows="25"
+    cols="150"
+    id="export"
+    readonly
+    placeholder={state == null
+      ? "No template is selected, so this is pointless :3"
+      : "Hit the button to refresh me!"}
+  />
   <hr />
 </main>
+<ScrollButton />
