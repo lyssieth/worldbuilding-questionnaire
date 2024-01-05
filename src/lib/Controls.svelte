@@ -52,5 +52,10 @@
     background-color: darken(#242424, 10%);
     border: 1px solid darken(#242424, 10%);
     border-radius: 0.5em 0.5em 0 0;
+
+    @media (prefers-color-scheme: light) {
+      background-color: darken(#f9f9f9, 10%);
+      border: 1px solid darken(#f9f9f9, 10%);
+    }
   }
 </style>

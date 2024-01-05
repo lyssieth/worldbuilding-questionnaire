@@ -94,6 +94,11 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+  #questionnaire {
+    background-color: darken(#ffffff, 5%);
+    border: 1px solid darken(#ffffff, 5%);
+  }
+
   a:hover {
     color: #747bff;
   }

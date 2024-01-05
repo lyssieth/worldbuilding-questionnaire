@@ -24,6 +24,10 @@
     padding: 0.5em;
     background-color: #3c3c3c;
 
+    @media (prefers-color-scheme: light) {
+      background-color: #f9f9f9;
+    }
+
     // if it's less than 600px wide, make it smaller
     @media (max-width: 600px) {
       padding: 0.25em;

@@ -72,7 +72,7 @@
   </label>
 </li>
 
-<style>
+<style lang="scss">
   .question {
     margin-bottom: 1em;
   }

@@ -28,5 +28,9 @@
       rgba(255, 255, 255, 0.87) 50%,
       rgba(0, 255, 0, 0.87) 50%
     );
+
+    @media (prefers-color-scheme: light) {
+      color: color-mix(in lab, #213547 50%, rgba(0, 255, 0, 0.87) 50%);
+    }
   }
 </style>
