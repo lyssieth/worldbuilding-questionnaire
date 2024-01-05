@@ -106,13 +106,13 @@
     questions empty, and they won't show up. Same goes for sections.
   </p>
 
-  <button on:click={() => exportQuestions(exportBlock)} disabled={state == null}
-    >Refresh</button
+  <button
+    on:click={() => exportQuestions(exportBlock)}
+    disabled={$state.current == null}>Refresh</button
   ><br />
   <textarea
     bind:this={exportBlock}
-    rows="25"
-    cols="150"
+    rows="10"
     id="export"
     readonly
     placeholder={state == null

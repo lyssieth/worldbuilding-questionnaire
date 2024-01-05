@@ -11,12 +11,6 @@
   let changed = false;
   const { type, placeholder } = question;
 
-  const cols = {
-    short: 60,
-    medium: 80,
-    long: 140,
-  };
-
   const rows = {
     short: 4,
     medium: 8,
@@ -47,7 +41,6 @@
         on:change={onChange}
         class="answer"
         rows={rows[length ?? "medium"]}
-        cols={cols[length ?? "medium"]}
         {placeholder}
       />
     {:else if type === "number"}
@@ -80,6 +73,7 @@
   input {
     display: block;
     width: 100%;
+    max-width: 600px;
   }
 
   input[type="number"] {
@@ -96,6 +90,11 @@
 
   input[type="text"][data-length="long"] {
     width: 80%;
+  }
+
+  textarea {
+    width: 100%;
+    max-width: 600px;
   }
 
   label {
