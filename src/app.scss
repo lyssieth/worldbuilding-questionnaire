@@ -16,10 +16,19 @@
 a {
   font-weight: 500;
   color: #a3a8ff;
+
+  @media (prefers-color-scheme: light) {
+    color: #1a25ff;
+  }
+
   text-decoration: inherit;
 }
 a:hover {
-  color: lighten(#a3a8ff, 10%);
+  color: lighten(#a3a8ff, 30%);
+
+  @media (prefers-color-scheme: light) {
+    color: darken(#1a25ff, 30%);
+  }
 }
 
 #questionnaire {
@@ -124,13 +133,10 @@ button:focus-visible {
     background-color: #ffffff;
   }
   #questionnaire {
-    background-color: darken(#ffffff, 5%);
-    border: 1px solid darken(#ffffff, 5%);
+    background-color: darken(#f9f9f9, 5%);
+    border: 1px solid darken(#f9f9f9, 5%);
   }
 
-  a:hover {
-    color: #747bff;
-  }
   button {
     background-color: #f9f9f9;
   }
