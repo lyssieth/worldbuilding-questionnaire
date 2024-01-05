@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { state } from "./store";
+  import { current } from "./store";
   import { exportQuestions } from "./util";
 
   let exportBlock: HTMLTextAreaElement;
 
-  state.subscribe(() => {
+  current.subscribe(() => {
     if (exportBlock) exportBlock.value = "";
   });
 </script>
@@ -24,7 +24,7 @@
     rows="10"
     id="export"
     readonly
-    placeholder="{$state.current == null
+    placeholder="{$current == null
       ? 'No template is selected, so this is pointless :3'
       : 'Hit the button to refresh me!'}"
   ></textarea><br />
@@ -34,13 +34,16 @@
     on:click="{() => {
       exportQuestions(exportBlock);
     }}"
-    disabled="{$state.current == null}">Refresh</button
+    disabled="{$current == null}">Refresh</button
   >
   <button
     on:click="{() => {
-      navigator.clipboard.writeText(exportBlock.value);
-    }}"
-    disabled="{exportBlock && exportBlock.value.length <= 0}"
-    >Copy to Clipboard</button
+      if (exportBlock && exportBlock.value.length > 0) {
+        navigator.clipboard.writeText(exportBlock.value);
+        alert('Copied to clipboard!');
+      } else {
+        alert('Nothing to copy!');
+      }
+    }}">Copy to Clipboard</button
   >
 </div>

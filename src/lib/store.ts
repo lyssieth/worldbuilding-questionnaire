@@ -1,8 +1,8 @@
 import { writable } from "svelte/store";
 import { type Template } from "./template";
 
-export const state = writable({
-  current: null
-} as {
-  current: null | Template;
-});
+export const current = writable(null as Template | null);
+export const changed = writable(false);
+export const permissionGranted = writable(
+  localStorage.getItem("permissionGranted") === "true"
+);

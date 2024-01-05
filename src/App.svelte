@@ -3,45 +3,10 @@
   import ExportBlock from "./lib/ExportBlock.svelte";
   import Questionnaire from "./lib/Questionnaire.svelte";
   import ScrollButton from "./lib/ScrollButton.svelte";
-  import { state } from "./lib/store";
-  import { type Template } from "./lib/template";
-
-  let changed: boolean = false;
-
-  function onTemplateChange(template: Template) {
-    if ($state.current && changed) {
-      const current = $state.current;
-      const confirm = window.confirm(
-        "You have unsaved changes. Are you sure you want to change templates?"
-      );
-
-      if (!confirm) {
-        const el = document.getElementById(
-          "templateSelect"
-        ) as HTMLSelectElement;
-
-        el.value = current.name;
-
-        return;
-      }
-    }
-
-    $state.current = template;
-    changed = false;
-
-    // can't trust the urls of other people sadly. sorry ;;
-    if (template.author instanceof Object) {
-      if (
-        template.author.name !== "lys" &&
-        template.author.url !== "https://lys.ee/contact"
-      ) {
-        $state.current.author = template.author.name;
-      }
-    }
-  }
+  import { changed } from "./lib/store";
 
   window.addEventListener("beforeunload", (e) => {
-    if (changed) {
+    if ($changed) {
       const confirm = "Are you sure you want to leave?";
       e.preventDefault();
       e.returnValue = confirm;
@@ -76,12 +41,8 @@
   <hr />
 
   <div id="questionnaire">
-    <Controls {onTemplateChange} />
-    {#if $state.current}
-      <Questionnaire bind:changed current="{$state.current}" />
-    {:else}
-      <p>There is currently no template selected. Select one above.</p>
-    {/if}
+    <Controls />
+    <Questionnaire />
   </div>
 
   <hr />

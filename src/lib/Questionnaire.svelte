@@ -1,11 +1,9 @@
 <script lang="ts">
   import Section from "./Section.svelte";
-  import type { Template, TemplateSection } from "./template";
+  import { changed, current } from "./store";
+  import type { TemplateSection } from "./template";
 
-  export let current: Template;
-  export let changed: boolean;
-
-  $: template = current;
+  $: template = $current;
 
   let sectionMap: Map<string, boolean> = new Map();
 
@@ -17,45 +15,49 @@
     sectionMap.set(section.title, hasValue);
 
     if (anyHasValue()) {
-      changed = true;
+      $changed = true;
     }
   }
 </script>
 
-{#key template}
-  <h2 class="template-title">{template.name}</h2>
-  {#if template.author}
-    <!-- check if it's an Author type -->
-    {#if template.author instanceof Object}
-      <h5 class="template-author">
-        by <a
-          href="{template.author.url}"
-          title="A link to the author of the template."
-          >{template.author.name}</a
-        >
-      </h5>
-    {:else}
-      <h5 class="template-author">by {template.author}</h5>
-    {/if}
-  {/if}
-  <p class="template-description">
-    {template.description}
-  </p>
-  <hr />
-  {#if template.sections.length > 0}
-    {#each template.sections as section, i}
-      <Section {section} {sectionChanged} />
-      {#if i !== template.sections.length - 1}
-        <hr />
+{#if template == null}
+  <p>No template is currently selected. Please remain calm and select one:3</p>
+{:else}
+  {#key template}
+    <h2 class="template-title">{template.name}</h2>
+    {#if template.author}
+      <!-- check if it's an Author type -->
+      {#if template.author instanceof Object}
+        <h5 class="template-author">
+          by <a
+            href="{template.author.url}"
+            title="A link to the author of the template."
+            >{template.author.name}</a
+          >
+        </h5>
+      {:else}
+        <h5 class="template-author">by {template.author}</h5>
       {/if}
-    {/each}
-  {:else}
-    <p>
-      There are no sections in this template. You can add more once I implement
-      this feature.
+    {/if}
+    <p class="template-description">
+      {template.description}
     </p>
-  {/if}
-{/key}
+    <hr />
+    {#if template.sections.length > 0}
+      {#each template.sections as section, i}
+        <Section {section} {sectionChanged} />
+        {#if i !== template.sections.length - 1}
+          <hr />
+        {/if}
+      {/each}
+    {:else}
+      <p>
+        There are no sections in this template. You can add more once I
+        implement this feature.
+      </p>
+    {/if}
+  {/key}
+{/if}
 
 <style lang="scss">
   .template-title {
