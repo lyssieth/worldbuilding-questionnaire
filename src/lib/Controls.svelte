@@ -3,7 +3,7 @@
     DEFAULT_TEMPLATES,
     getTemplate,
     savedTemplates,
-    type Template,
+    type Template
   } from "./template";
 
   export let onTemplateChange: (template: Template) => void;
@@ -29,7 +29,7 @@
 <div class="controls">
   <label>
     <span>Template Selection</span>
-    <select id="templateSelect" on:change={onChange}>
+    <select id="templateSelect" on:change="{onChange}">
       <option disabled selected id="gremlin">--- SELECT A TEMPLATE ---</option>
       <option disabled>--- DEFAULT TEMPLATES ---</option>
       {#each DEFAULT_TEMPLATES as template}

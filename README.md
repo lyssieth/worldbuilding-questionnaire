@@ -10,6 +10,4 @@ PoC but usable. [Demo hosted by GitHub pages](https://lyssieth.github.io/worldbu
 
 ## Future Plans
 
-- [ ] Creation/modification/saving of templates
-- [ ] Import/export of templates (json)
-- [ ] Other export formats than markdown (html, pdf, etc.)
+[see the todo](todo.md)

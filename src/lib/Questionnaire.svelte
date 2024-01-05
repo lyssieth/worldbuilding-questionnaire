@@ -29,7 +29,7 @@
     {#if template.author instanceof Object}
       <h5 class="template-author">
         by <a
-          href={template.author.url}
+          href="{template.author.url}"
           title="A link to the author of the template."
           >{template.author.name}</a
         >

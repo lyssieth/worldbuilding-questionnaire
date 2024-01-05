@@ -84,9 +84,9 @@
     <Controls {onTemplateChange} />
     {#if $state.current}
       <Questionnaire
-        bind:this={questionnaire}
+        bind:this="{questionnaire}"
         bind:changed
-        current={$state.current}
+        current="{$state.current}"
       />
     {:else}
       <p>There is currently no template selected. Select one above.</p>
@@ -107,18 +107,20 @@
   </p>
 
   <button
-    on:click={() => exportQuestions(exportBlock)}
-    disabled={$state.current == null}>Refresh</button
+    on:click="{() => {
+      exportQuestions(exportBlock);
+    }}"
+    disabled="{$state.current == null}">Refresh</button
   ><br />
   <textarea
-    bind:this={exportBlock}
+    bind:this="{exportBlock}"
     rows="10"
     id="export"
     readonly
-    placeholder={state == null
-      ? "No template is selected, so this is pointless :3"
-      : "Hit the button to refresh me!"}
-  />
+    placeholder="{$state.current == null
+      ? 'No template is selected, so this is pointless :3'
+      : 'Hit the button to refresh me!'}"
+  ></textarea>
   <hr />
 </main>
 <ScrollButton />

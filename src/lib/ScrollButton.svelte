@@ -9,8 +9,8 @@
   $: condition = width < 600;
 </script>
 
-<svelte:window bind:innerWidth={width} />
-<button on:click={toTop} id="scrollButton" title="Return to top"
+<svelte:window bind:innerWidth="{width}" />
+<button on:click="{toTop}" id="scrollButton" title="Return to top"
   >{condition ? "Top ^" : "Back to Top ^"}</button
 >
 

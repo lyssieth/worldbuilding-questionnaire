@@ -29,7 +29,7 @@
   }
 </script>
 
-<details class="section" data-section={section.title}>
+<details class="section" data-section="{section.title}">
   <summary title="Click to expand/collapse">
     <SectionTitle {changed}
       >{section.title} ({count}/{section.questions.length})</SectionTitle

@@ -4,9 +4,8 @@ export function exportQuestions(exportBlock: HTMLTextAreaElement) {
   const exportText = Array.from(sections)
     .map((section) => {
       const sectionTitle = section.getAttribute("data-section");
-      const sectionDescription = section.querySelector(
-        ".section-description"
-      )?.textContent;
+      const sectionDescription = section.querySelector(".section-description")
+        ?.textContent;
       const questions = section.querySelectorAll(".question");
       console.debug({ questions });
 

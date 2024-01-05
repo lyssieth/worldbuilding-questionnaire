@@ -1,0 +1,4 @@
+node_modules/
+dist/
+svelte.config.js
+vite.config.ts

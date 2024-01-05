@@ -14,7 +14,7 @@
   const rows = {
     short: 4,
     medium: 8,
-    long: 16,
+    long: 16
   };
 
   function onChange(evt: Event) {
@@ -31,22 +31,22 @@
   }
 </script>
 
-<li class="question" data-question={question.question}>
+<li class="question" data-question="{question.question}">
   <label>
     <QuestionTitle {changed}>{question.question}</QuestionTitle>
     {#if type === "textarea"}
       {@const { length } = question}
       <textarea
-        data-flub={question.placeholder}
-        on:change={onChange}
+        data-flub="{question.placeholder}"
+        on:change="{onChange}"
         class="answer"
-        rows={rows[length ?? "medium"]}
+        rows="{rows[length ?? 'medium']}"
         {placeholder}
-      />
+      ></textarea>
     {:else if type === "number"}
       <input
-        data-flub={question.placeholder}
-        on:change={onChange}
+        data-flub="{question.placeholder}"
+        on:change="{onChange}"
         class="answer"
         type="number"
         {placeholder}
@@ -54,12 +54,12 @@
     {:else if type === "text"}
       {@const { length } = question}
       <input
-        data-flub={question.placeholder}
-        on:change={onChange}
+        data-flub="{question.placeholder}"
+        on:change="{onChange}"
         class="answer"
         type="text"
         {placeholder}
-        data-length={length ?? "medium"}
+        data-length="{length ?? 'medium'}"
       />
     {/if}
   </label>

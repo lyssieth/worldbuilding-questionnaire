@@ -3,7 +3,7 @@ import App from "./App.svelte";
 
 const app = new App({
   target: document.getElementById("app") as HTMLElement,
-  hydrate: false,
+  hydrate: false
 });
 
 export default app;

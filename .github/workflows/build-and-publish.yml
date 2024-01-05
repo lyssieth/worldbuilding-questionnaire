@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "src/**"
+      - "public/**"
+      - "pnpm-lock.yaml"
+      - "package.json"
+      - "index.html"
   workflow_dispatch:
 
 permissions:
