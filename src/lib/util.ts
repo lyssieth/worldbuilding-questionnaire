@@ -1,13 +1,13 @@
 export function exportQuestions(exportBlock: HTMLTextAreaElement) {
   const sections = document.querySelectorAll(".section");
-  console.debug({ sections });
+  // console.debug({ sections });
   const exportText = Array.from(sections)
     .map((section) => {
       const sectionTitle = section.getAttribute("data-section");
       const sectionDescription = section.querySelector(".section-description")
         ?.textContent;
       const questions = section.querySelectorAll(".question");
-      console.debug({ questions });
+      // console.debug({ questions });
 
       const questionTexts = Array.from(questions)
         .map((question) => {
@@ -16,7 +16,7 @@ export function exportQuestions(exportBlock: HTMLTextAreaElement) {
             question.querySelector(".answer");
           const answer = answerEl?.value;
 
-          console.debug({ questionText, answer });
+          // console.debug({ questionText, answer });
           if (answer) {
             return `## ${questionText}\n${answer}`;
           } else {
@@ -25,7 +25,7 @@ export function exportQuestions(exportBlock: HTMLTextAreaElement) {
         })
         .join("\n");
 
-      console.debug({ questionTexts });
+      // console.debug({ questionTexts });
 
       if (questionTexts.trim().length > 0) {
         return `# ${sectionTitle}\n${sectionDescription}\n${questionTexts}`;

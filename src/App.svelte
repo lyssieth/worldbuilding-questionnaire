@@ -1,15 +1,12 @@
 <script lang="ts">
   import Controls from "./lib/Controls.svelte";
+  import ExportBlock from "./lib/ExportBlock.svelte";
   import Questionnaire from "./lib/Questionnaire.svelte";
   import ScrollButton from "./lib/ScrollButton.svelte";
   import { state } from "./lib/store";
   import { type Template } from "./lib/template";
-  import { exportQuestions } from "./lib/util";
-
-  let exportBlock: HTMLTextAreaElement;
 
   let changed: boolean = false;
-  let questionnaire: Questionnaire;
 
   function onTemplateChange(template: Template) {
     if ($state.current && changed) {
@@ -41,8 +38,6 @@
         $state.current.author = template.author.name;
       }
     }
-
-    exportBlock.value = "";
   }
 
   window.addEventListener("beforeunload", (e) => {
@@ -83,11 +78,7 @@
   <div id="questionnaire">
     <Controls {onTemplateChange} />
     {#if $state.current}
-      <Questionnaire
-        bind:this="{questionnaire}"
-        bind:changed
-        current="{$state.current}"
-      />
+      <Questionnaire bind:changed current="{$state.current}" />
     {:else}
       <p>There is currently no template selected. Select one above.</p>
     {/if}
@@ -95,32 +86,6 @@
 
   <hr />
 
-  <label>
-    <p>
-      This text area is meant for exporting the questions and their answers. It
-      currently exports as a very very basic <a
-        href="https://en.wikipedia.org/wiki/Markdown"
-        title="markdown wikipedia page">markdown-formatted</a
-      > chunk. Empty questions won't get exported, so you can leave any unapplicable
-      questions empty, and they won't show up. Same goes for sections.
-    </p>
-
-    <textarea
-      bind:this="{exportBlock}"
-      rows="10"
-      id="export"
-      readonly
-      placeholder="{$state.current == null
-        ? 'No template is selected, so this is pointless :3'
-        : 'Hit the button to refresh me!'}"
-    ></textarea><br />
-  </label>
-  <button
-    on:click="{() => {
-      exportQuestions(exportBlock);
-    }}"
-    disabled="{$state.current == null}">Refresh</button
-  >
-  <hr />
+  <ExportBlock />
 </main>
 <ScrollButton />
