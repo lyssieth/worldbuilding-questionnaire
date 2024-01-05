@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/web-manifest.json",
+  "short_name": "Worldbuilding Questionnaire",
+  "name": "Worldbuilding Questionnaire",
+  "icons": [
+    {
+      "src": "svelte.svg",
+      "type": "image/svg+xml",
+      "sizes": "27x32"
+    }
+  ],
+  "id": "/",
+  "start_url": "/",
+  "background_color": "#242424",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#a3a8ff",
+  "description": "A questionnaire to help you build your world."
+}
