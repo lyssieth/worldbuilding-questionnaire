@@ -94,33 +94,33 @@
   </div>
 
   <hr />
-  <p>
-    This text area is meant for exporting the questions and their answers. It
-    currently exports as a very very basic <a
-      href="https://en.wikipedia.org/wiki/Markdown"
-      title="markdown wikipedia page">markdown-formatted</a
-    > chunk.
-  </p>
-  <p>
-    Empty questions won't get exported, so you can leave any unapplicable
-    questions empty, and they won't show up. Same goes for sections.
-  </p>
 
+  <label>
+    <p>
+      This text area is meant for exporting the questions and their answers. It
+      currently exports as a very very basic <a
+        href="https://en.wikipedia.org/wiki/Markdown"
+        title="markdown wikipedia page">markdown-formatted</a
+      > chunk. Empty questions won't get exported, so you can leave any unapplicable
+      questions empty, and they won't show up. Same goes for sections.
+    </p>
+
+    <textarea
+      bind:this="{exportBlock}"
+      rows="10"
+      id="export"
+      readonly
+      placeholder="{$state.current == null
+        ? 'No template is selected, so this is pointless :3'
+        : 'Hit the button to refresh me!'}"
+    ></textarea><br />
+  </label>
   <button
     on:click="{() => {
       exportQuestions(exportBlock);
     }}"
     disabled="{$state.current == null}">Refresh</button
-  ><br />
-  <textarea
-    bind:this="{exportBlock}"
-    rows="10"
-    id="export"
-    readonly
-    placeholder="{$state.current == null
-      ? 'No template is selected, so this is pointless :3'
-      : 'Hit the button to refresh me!'}"
-  ></textarea>
+  >
   <hr />
 </main>
 <ScrollButton />
