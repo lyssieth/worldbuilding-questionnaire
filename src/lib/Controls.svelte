@@ -155,10 +155,15 @@
   editMode.subscribe((v) => {
     if (v && $current) {
       current.update((v) => v); // noop just to trigger the update
-
-      if ($current.author instanceof Object)
-        $current.author = $current.author.name; // remove the link so nobody can claim it's an official template
     }
+  });
+
+  current.subscribe((value) => {
+    if ($editMode && value) {
+      if (value.author instanceof Object) value.author = value.author.name; // remove the link so nobody can claim it's an official template
+    }
+
+    return value;
   });
 </script>
 
