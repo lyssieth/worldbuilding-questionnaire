@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Packer } from "docx";
+  import { exportToDoc } from "./document";
   import { current } from "./store";
   import { exportQuestions } from "./util";
 
@@ -45,5 +47,26 @@
         alert('Nothing to copy!');
       }
     }}">Copy to Clipboard</button
+  >
+  <button
+    on:click="{async () => {
+      if (exportBlock && exportBlock.value.length > 0) {
+        const doc = exportToDoc(exportBlock.value);
+
+        const blob = await Packer.toBlob(doc);
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'exported.docx';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 5);
+      } else {
+        alert('Nothing to export!');
+      }
+    }}">Export as ODT</button
   >
 </div>
