@@ -2,7 +2,7 @@
 
 The purpose of this website is to act as a questionnaire for worldbuilding purposes.
 
-Version two of the experiment brings in templates and a more modular approach to the UI.
+Version three of the experiment brings editing/saving/loading.
 
 ## Current State
 

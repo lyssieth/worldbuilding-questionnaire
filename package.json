@@ -13,8 +13,10 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@tsconfig/svelte": "^5.0.2",
+    "@types/object-inspect": "^1.8.4",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
+    "ajv": "^8.12.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.2",
@@ -24,11 +26,15 @@
     "sass": "^1.69.7",
     "svelte": "^4.2.8",
     "svelte-check": "^3.6.2",
+    "svelte-feather-icons": "^4.1.0",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
     "vite": "^5.0.11"
   },
   "dependencies": {
-    "docx": "^8.5.0"
+    "docx": "^8.5.0",
+    "feather-icons": "^4.29.1",
+    "hash-wasm": "^4.11.0",
+    "object-inspect": "^1.13.1"
   }
 }

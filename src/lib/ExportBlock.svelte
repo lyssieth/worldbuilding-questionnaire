@@ -4,15 +4,17 @@
   import { current, shouldRefresh } from "./store";
   import { exportQuestions } from "./util";
 
-  let exportBlock: HTMLTextAreaElement;
+  let exportBlock: HTMLTextAreaElement | null;
 
   current.subscribe(() => {
     if (exportBlock) exportBlock.value = "";
   });
 
   shouldRefresh.subscribe(() => {
-    if (exportBlock) exportQuestions(exportBlock);
-    $shouldRefresh = false;
+    if (exportBlock) {
+      exportQuestions(exportBlock);
+      $shouldRefresh = false;
+    }
   });
 </script>
 
@@ -33,14 +35,14 @@
     readonly
     placeholder="{$current == null
       ? 'No template is selected, so this is pointless :3'
-      : 'Hit the button to refresh me!'}"
+      : 'Write some words and text will appear!'}"
   ></textarea><br />
 </label>
 <div class="export-buttons">
   <button
-    on:click="{() => {
+    on:click="{async () => {
       if (exportBlock && exportBlock.value.length > 0) {
-        navigator.clipboard.writeText(exportBlock.value);
+        await navigator.clipboard.writeText(exportBlock.value);
         alert('Copied to clipboard!');
       } else {
         alert('Nothing to copy!');

@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { PlusIcon } from "svelte-feather-icons";
+  import EditableText from "./EditableText.svelte";
   import Question from "./Question.svelte";
   import SectionTitle from "./SectionTitle.svelte";
-  import type { TemplateQuestion, TemplateSection } from "./template";
+  import { current, editMode } from "./store";
+  import type { TemplateQuestion, TemplateSection } from "./types/template";
 
   export let section: TemplateSection;
   export let sectionChanged: (
@@ -27,21 +30,66 @@
 
     count = Array.from(questionMap.values()).filter((v) => v).length;
   }
+
+  function addQuestion() {
+    current.update((c) => {
+      if (c)
+        section.questions.push({
+          question: "New Question",
+          type: "textarea",
+          length: "medium",
+          placeholder: "New Placeholder"
+        });
+
+      return c;
+    });
+  }
+
+  function removeQuestion(i: number) {
+    current.update((c) => {
+      if (c) section.questions.splice(i, 1);
+
+      return c;
+    });
+  }
 </script>
 
 <details class="section" data-section="{section.title}">
   <summary title="Click to expand/collapse">
     <SectionTitle {changed}
-      >{section.title} ({count}/{section.questions.length})</SectionTitle
+      ><EditableText bind:value="{section.title}" /> ({count}/{section.questions
+        .length}) <slot /></SectionTitle
     >
     {#if section.description}
-      <p class="section-description">{section.description}</p>
+      <p class="section-description">
+        <EditableText type="textarea" bind:value="{section.description}" />
+      </p>
     {/if}
   </summary>
   <ul class="section-questions">
+    {#if $editMode}
+      <li>
+        <button
+          class="edit-button"
+          title="Add a new question to this section."
+          on:click="{addQuestion}"
+          ><PlusIcon size="1x" />Add a new question</button
+        >
+      </li>
+    {/if}
     {#if section.questions.length > 0}
-      {#each section.questions as question}
-        <Question bind:question {questionChanged} />
+      {#each section.questions as question, i}
+        <Question bind:question {questionChanged}>
+          {#if $editMode}
+            <button
+              class="edit-button"
+              title="Remove this question from the section."
+              on:click="{() => {
+                removeQuestion(i);
+              }}">Remove</button
+            >
+          {/if}
+        </Question>
       {/each}
     {:else}
       <p>

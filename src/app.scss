@@ -141,3 +141,16 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.edit-button {
+  padding: 0.25em;
+  background-color: color-mix(in srgb, #1a1a1a 55%, #09f 45%);
+  display: inline-flex;
+  place-items: center;
+  place-content: center;
+  gap: 0.25em;
+
+  @media (prefers-color-scheme: light) {
+    background-color: color-mix(in srgb, #f9f9f9 55%, #09f 45%);
+  }
+}

@@ -1,6 +1,8 @@
 <script lang="ts">
   import Controls from "./lib/Controls.svelte";
   import ExportBlock from "./lib/ExportBlock.svelte";
+  import ImportModal from "./lib/ImportModal.svelte";
+  import PermissionModal from "./lib/PermissionModal.svelte";
   import Questionnaire from "./lib/Questionnaire.svelte";
   import ScrollButton from "./lib/ScrollButton.svelte";
   import { changed } from "./lib/store";
@@ -21,10 +23,9 @@
   <h2>What is this?</h2>
   <p>
     The purpose of this website is to act as a questionnaire for worldbuilding
-    purposes. This is v2 of the experiment, where I've added templates for
-    different things one might want to build, automatic generation of sections,
-    and collapsible sections. There is also change tracking for the sections, so
-    changing the template can't break things.
+    purposes. This is v3 of the experiment, where I've added
+    saving/loading/editing functionality. Import/export theoretically also
+    works. To export a template, you must now be in Edit Mode.
   </p>
 
   <p>
@@ -39,7 +40,6 @@
     >.
   </p>
   <hr />
-
   <div id="questionnaire">
     <Controls />
     <Questionnaire />
@@ -50,3 +50,5 @@
   <ExportBlock />
 </main>
 <ScrollButton />
+<PermissionModal />
+<ImportModal />

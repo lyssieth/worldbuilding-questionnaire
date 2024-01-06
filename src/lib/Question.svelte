@@ -1,6 +1,8 @@
 <script lang="ts">
+  import EditableText from "./EditableText.svelte";
   import QuestionTitle from "./QuestionTitle.svelte";
-  import type { TemplateQuestion } from "./template";
+  import { editMode } from "./store";
+  import type { TemplateQuestion } from "./types/template";
 
   export let question: TemplateQuestion;
   export let questionChanged: (
@@ -33,8 +35,30 @@
 
 <li class="question" data-question="{question.question}">
   <label>
-    <QuestionTitle {changed}>{question.question}</QuestionTitle>
-    {#if type === "textarea"}
+    <QuestionTitle {changed}
+      ><EditableText bind:value="{question.question}" /> <slot /></QuestionTitle
+    >
+    {#if $editMode}
+      <p><EditableText bind:value="{question.placeholder}" /></p>
+      <label style="flex-direction: row; gap: 0.5em;">
+        <span>What type of question is this?</span>
+        <select bind:value="{question.type}">
+          <option value="textarea">Text area</option>
+          <option value="text">Text box</option>
+          <option value="number">Number</option>
+        </select>
+      </label>
+      {#if question.type === "textarea" || question.type === "text"}
+        <label style="flex-direction: row; gap: 0.5em;">
+          <span>How large the text area/box should be:</span>
+          <select bind:value="{question.length}">
+            <option value="short">Short</option>
+            <option value="medium">Medium</option>
+            <option value="long">Long</option>
+          </select>
+        </label>
+      {/if}
+    {:else if type === "textarea"}
       {@const { length } = question}
       <textarea
         data-flub="{question.placeholder}"

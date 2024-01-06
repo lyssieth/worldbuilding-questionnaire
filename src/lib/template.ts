@@ -1,44 +1,7 @@
-export interface TemplateAuthor {
-  name: string;
-  url: string;
-}
-
-export interface Template {
-  name: string;
-  author?: TemplateAuthor | string;
-  description: string;
-  sections: TemplateSection[];
-}
-
-export interface TemplateSection {
-  title: string;
-  description?: string;
-  questions: TemplateQuestion[];
-}
-
-export interface TemplateQuestionBase {
-  question: string;
-  placeholder?: string;
-}
-
-export interface TemplateTextQuestion extends TemplateQuestionBase {
-  type: "text";
-  length?: "short" | "medium" | "long";
-}
-
-export interface TemplateTextareaQuestion extends TemplateQuestionBase {
-  type: "textarea";
-  length?: "short" | "medium" | "long";
-}
-
-export interface TemplateNumberQuestion extends TemplateQuestionBase {
-  type: "number";
-}
-
-export type TemplateQuestion =
-  | TemplateTextQuestion
-  | TemplateTextareaQuestion
-  | TemplateNumberQuestion;
+import { blake3 } from "hash-wasm";
+import { get, writable } from "svelte/store";
+import { permissionGranted, permissionModalOpen } from "./store";
+import type { Template } from "./types/template";
 
 const CHARACTER_TEMPLATE: Template = {
   name: "Character",
@@ -1086,11 +1049,52 @@ export const DEFAULT_TEMPLATES: Template[] = [
 ];
 
 const ls = localStorage.getItem("savedTemplates") ?? "[]";
-export const savedTemplates: Template[] = JSON.parse(ls) as Template[];
+export const savedTemplates = writable(JSON.parse(ls) as Template[]);
+
+export async function hashTemplate(template: Template): Promise<string> {
+  const temp = { ...template };
+  temp.id = "HASHING_ID";
+  const hash = await blake3(JSON.stringify(temp));
+
+  return hash;
+}
+
+export async function saveToLocalStorage(template: Template) {
+  if (get(permissionGranted)) {
+    template.id = await hashTemplate(template);
+
+    savedTemplates.update((c) => [...c, template]);
+    localStorage.setItem("savedTemplates", JSON.stringify(get(savedTemplates)));
+  } else {
+    permissionModalOpen.set(true);
+  }
+}
+
+export async function savedToLocalStorage() {
+  if (get(permissionGranted)) {
+    for (const template of get(savedTemplates)) {
+      const hash = await hashTemplate(template);
+
+      savedTemplates.update((c) => {
+        const index = c.findIndex((t) => t == template);
+        c[index].id = hash;
+        return c;
+      });
+    }
+
+    localStorage.setItem("savedTemplates", JSON.stringify(get(savedTemplates)));
+  } else {
+    permissionModalOpen.set(true);
+  }
+}
 
 export function getTemplate(name: string): Template | null {
+  if (name.includes("|")) {
+    name = name.split("|")[0].trim();
+  }
+
   return (
-    [...DEFAULT_TEMPLATES, ...savedTemplates].find(
+    [...DEFAULT_TEMPLATES, ...get(savedTemplates)].find(
       (template) => template.name === name
     ) ?? null
   );
