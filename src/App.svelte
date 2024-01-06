@@ -39,6 +39,11 @@
       >on one of these places I exist on</a
     >.
   </p>
+  <p>
+    Currently, entering Edit Mode forcibly refreshes the display without giving
+    a prompt to save first. Please be aware of this and don't edit a template
+    while filling it in.
+  </p>
   <hr />
   <div id="questionnaire">
     <Controls />

@@ -1,16 +1,17 @@
 <script lang="ts">
   import EditableText from "./EditableText.svelte";
   import QuestionTitle from "./QuestionTitle.svelte";
-  import { editMode } from "./store";
+  import { current, editMode } from "./store";
   import type { TemplateQuestion } from "./types/template";
 
+  let self: HTMLLIElement | null;
   export let question: TemplateQuestion;
   export let questionChanged: (
     question: TemplateQuestion,
     hasValue: boolean
   ) => void;
 
-  let changed = false;
+  let qChanged = false;
   const { type, placeholder } = question;
 
   const rows = {
@@ -23,17 +24,32 @@
     const el = evt.target as HTMLInputElement | HTMLTextAreaElement;
 
     if (el.value.length === 0) {
-      changed = false;
+      qChanged = false;
       questionChanged(question, false);
       return;
     }
 
-    changed = true;
+    qChanged = true;
     questionChanged(question, true);
   }
+
+  current.subscribe(() => {
+    qChanged = false;
+
+    if (self) {
+      const inputElement = self.querySelector(".answer");
+
+      if (
+        inputElement instanceof HTMLInputElement ||
+        inputElement instanceof HTMLTextAreaElement
+      ) {
+        inputElement.value = "";
+      }
+    }
+  });
 </script>
 
-<li class="question" data-question="{question.question}">
+<li class="question" data-question="{question.question}" bind:this="{self}">
   {#if $editMode}
     <div class="editable-block">
       <h3>Title</h3>
@@ -66,7 +82,7 @@
     </div>
   {:else}
     <label>
-      <QuestionTitle {changed}
+      <QuestionTitle changed="{qChanged}"
         ><EditableText bind:value="{question.question}" />
         <slot /></QuestionTitle
       >

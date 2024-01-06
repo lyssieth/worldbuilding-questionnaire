@@ -151,6 +151,15 @@
       return template.name;
     }
   }
+
+  editMode.subscribe((v) => {
+    if (v && $current) {
+      current.update((v) => v); // noop just to trigger the update
+
+      if ($current.author instanceof Object)
+        $current.author = $current.author.name; // remove the link so nobody can claim it's an official template
+    }
+  });
 </script>
 
 <div class="controls">

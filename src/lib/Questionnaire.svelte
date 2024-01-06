@@ -41,11 +41,8 @@
     });
   }
 
-  editMode.subscribe((v) => {
-    if (v && $current) {
-      if ($current.author instanceof Object)
-        $current.author = $current.author.name; // remove the link so nobody can claim it's an official template
-    }
+  current.subscribe(() => {
+    sectionMap = new Map();
   });
 </script>
 

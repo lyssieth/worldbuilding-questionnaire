@@ -15,7 +15,7 @@
   let questionMap: Map<string, boolean> = new Map(
     section.questions.map((q) => [q.question, false])
   );
-  let changed = false;
+  let sChanged = false;
   let count = 0;
 
   function anyHasValue() {
@@ -24,8 +24,7 @@
 
   function questionChanged(question: TemplateQuestion, hasValue: boolean) {
     questionMap.set(question.question, hasValue);
-    changed = anyHasValue();
-    // TODO: make it mark the section as changed somehow
+    sChanged = anyHasValue();
     sectionChanged(section, anyHasValue());
 
     count = Array.from(questionMap.values()).filter((v) => v).length;
@@ -52,11 +51,17 @@
       return c;
     });
   }
+
+  current.subscribe(() => {
+    questionMap = new Map(section.questions.map((q) => [q.question, false]));
+    sChanged = false;
+    count = 0;
+  });
 </script>
 
 <details class="section" data-section="{section.title}">
   <summary title="Click to expand/collapse">
-    <SectionTitle {changed}
+    <SectionTitle changed="{sChanged}"
       ><EditableText bind:value="{section.title}" /> ({count}/{section.questions
         .length}) <slot /></SectionTitle
     >
