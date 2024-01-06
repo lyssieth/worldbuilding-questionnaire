@@ -34,38 +34,38 @@
 </script>
 
 <li class="question" data-question="{question.question}">
-  <label>
-    {#if $editMode}
-      <div class="editable-block">
-        <h3>Title</h3>
-        <pre class="editable"><EditableText
-            bind:value="{question.question}"
-          /></pre>
-        <hr />
-        <h3 class="ediitable-title">Placeholder</h3>
-        <pre class="editable"><EditableText
-            bind:value="{question.placeholder}"
-          /></pre>
+  {#if $editMode}
+    <div class="editable-block">
+      <h3>Title</h3>
+      <pre class="editable"><EditableText
+          bind:value="{question.question}"
+        /></pre>
+      <hr />
+      <h3 class="ediitable-title">Placeholder</h3>
+      <pre class="editable"><EditableText
+          bind:value="{question.placeholder}"
+        /></pre>
+      <label style="flex-direction: row; gap: 0.5em;">
+        <span>What type of question is this?</span>
+        <select bind:value="{question.type}">
+          <option value="textarea">Text area</option>
+          <option value="text">Text box</option>
+          <option value="number">Number</option>
+        </select>
+      </label>
+      {#if question.type === "textarea" || question.type === "text"}
         <label style="flex-direction: row; gap: 0.5em;">
-          <span>What type of question is this?</span>
-          <select bind:value="{question.type}">
-            <option value="textarea">Text area</option>
-            <option value="text">Text box</option>
-            <option value="number">Number</option>
+          <span>How large the text area/box should be:</span>
+          <select bind:value="{question.length}">
+            <option value="short">Short</option>
+            <option value="medium">Medium</option>
+            <option value="long">Long</option>
           </select>
         </label>
-        {#if question.type === "textarea" || question.type === "text"}
-          <label style="flex-direction: row; gap: 0.5em;">
-            <span>How large the text area/box should be:</span>
-            <select bind:value="{question.length}">
-              <option value="short">Short</option>
-              <option value="medium">Medium</option>
-              <option value="long">Long</option>
-            </select>
-          </label>
-        {/if}
-      </div>
-    {:else}
+      {/if}
+    </div>
+  {:else}
+    <label>
       <QuestionTitle {changed}
         ><EditableText bind:value="{question.question}" />
         <slot /></QuestionTitle
@@ -98,8 +98,8 @@
           data-length="{length ?? 'medium'}"
         />
       {/if}
-    {/if}
-  </label>
+    </label>
+  {/if}
 </li>
 
 <style lang="scss">
