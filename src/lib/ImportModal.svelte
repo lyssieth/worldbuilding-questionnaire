@@ -17,6 +17,8 @@
 
     try {
       const data = validate(JSON.parse(template));
+      if (data.author instanceof Object) data.author = data.author.name; // remove the link so nobody can claim it's an official template
+
       $current = data;
       $importModalOpen = false;
       dialog.close();

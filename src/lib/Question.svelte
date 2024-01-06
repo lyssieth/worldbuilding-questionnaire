@@ -35,56 +35,69 @@
 
 <li class="question" data-question="{question.question}">
   <label>
-    <QuestionTitle {changed}
-      ><EditableText bind:value="{question.question}" /> <slot /></QuestionTitle
-    >
     {#if $editMode}
-      <p><EditableText bind:value="{question.placeholder}" /></p>
-      <label style="flex-direction: row; gap: 0.5em;">
-        <span>What type of question is this?</span>
-        <select bind:value="{question.type}">
-          <option value="textarea">Text area</option>
-          <option value="text">Text box</option>
-          <option value="number">Number</option>
-        </select>
-      </label>
-      {#if question.type === "textarea" || question.type === "text"}
+      <div class="editable-block">
+        <h3>Title</h3>
+        <pre class="editable"><EditableText
+            bind:value="{question.question}"
+          /></pre>
+        <hr />
+        <h3 class="ediitable-title">Placeholder</h3>
+        <pre class="editable"><EditableText
+            bind:value="{question.placeholder}"
+          /></pre>
         <label style="flex-direction: row; gap: 0.5em;">
-          <span>How large the text area/box should be:</span>
-          <select bind:value="{question.length}">
-            <option value="short">Short</option>
-            <option value="medium">Medium</option>
-            <option value="long">Long</option>
+          <span>What type of question is this?</span>
+          <select bind:value="{question.type}">
+            <option value="textarea">Text area</option>
+            <option value="text">Text box</option>
+            <option value="number">Number</option>
           </select>
         </label>
+        {#if question.type === "textarea" || question.type === "text"}
+          <label style="flex-direction: row; gap: 0.5em;">
+            <span>How large the text area/box should be:</span>
+            <select bind:value="{question.length}">
+              <option value="short">Short</option>
+              <option value="medium">Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </label>
+        {/if}
+      </div>
+    {:else}
+      <QuestionTitle {changed}
+        ><EditableText bind:value="{question.question}" />
+        <slot /></QuestionTitle
+      >
+      {#if type === "textarea"}
+        {@const { length } = question}
+        <textarea
+          data-flub="{question.placeholder}"
+          on:change="{onChange}"
+          class="answer"
+          rows="{rows[length ?? 'medium']}"
+          {placeholder}
+        ></textarea>
+      {:else if type === "number"}
+        <input
+          data-flub="{question.placeholder}"
+          on:change="{onChange}"
+          class="answer"
+          type="number"
+          {placeholder}
+        />
+      {:else if type === "text"}
+        {@const { length } = question}
+        <input
+          data-flub="{question.placeholder}"
+          on:change="{onChange}"
+          class="answer"
+          type="text"
+          {placeholder}
+          data-length="{length ?? 'medium'}"
+        />
       {/if}
-    {:else if type === "textarea"}
-      {@const { length } = question}
-      <textarea
-        data-flub="{question.placeholder}"
-        on:change="{onChange}"
-        class="answer"
-        rows="{rows[length ?? 'medium']}"
-        {placeholder}
-      ></textarea>
-    {:else if type === "number"}
-      <input
-        data-flub="{question.placeholder}"
-        on:change="{onChange}"
-        class="answer"
-        type="number"
-        {placeholder}
-      />
-    {:else if type === "text"}
-      {@const { length } = question}
-      <input
-        data-flub="{question.placeholder}"
-        on:change="{onChange}"
-        class="answer"
-        type="text"
-        {placeholder}
-        data-length="{length ?? 'medium'}"
-      />
     {/if}
   </label>
 </li>

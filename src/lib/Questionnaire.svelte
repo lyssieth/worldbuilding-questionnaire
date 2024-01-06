@@ -40,6 +40,13 @@
       return c;
     });
   }
+
+  editMode.subscribe((v) => {
+    if (v && $current) {
+      if ($current.author instanceof Object)
+        $current.author = $current.author.name; // remove the link so nobody can claim it's an official template
+    }
+  });
 </script>
 
 <p style="font-size: 0.75em;">Note: the sections are collapsible :3</p>
