@@ -66,6 +66,6 @@
       } else {
         alert('Nothing to export!');
       }
-    }}">Export as ODT</button
+    }}">Export as DOCX</button
   >
 </div>
