@@ -46,6 +46,15 @@
     ></textarea>
     <div class="horizontal">
       <button class="import" on:click="{importModal}">Import</button>
+      <button
+        class="cancel"
+        on:click="{() => {
+          $importModalOpen = false;
+          dialog.close();
+        }}"
+      >
+        Cancel
+      </button>
     </div>
   </div>
 </dialog>
@@ -56,6 +65,14 @@
 
     @media (prefers-color-scheme: light) {
       background-color: color-mix(in srgb, #f9f9f9 80%, #0f0 20%);
+    }
+  }
+
+  button.cancel {
+    background-color: color-mix(in srgb, #242424 80%, #f00 20%);
+
+    @media (prefers-color-scheme: light) {
+      background-color: color-mix(in srgb, #f9f9f9 80%, #f00 20%);
     }
   }
 
