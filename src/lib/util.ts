@@ -36,7 +36,7 @@ export function exportQuestions(exportBlock: HTMLTextAreaElement) {
     .join("\n\n");
 
   if (exportText.trim().length > 0) {
-    exportBlock.value = exportText.trim();
+    exportBlock.value = exportText.trim().replaceAll(/\n{2,}/g, "\n");
   } else {
     exportBlock.value = "";
   }

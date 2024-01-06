@@ -1,6 +1,6 @@
 <script lang="ts">
   import Section from "./Section.svelte";
-  import { changed, current } from "./store";
+  import { changed, current, shouldRefresh } from "./store";
   import type { TemplateSection } from "./template";
 
   $: template = $current;
@@ -16,6 +16,7 @@
 
     if (anyHasValue()) {
       $changed = true;
+      $shouldRefresh = true;
     }
   }
 </script>

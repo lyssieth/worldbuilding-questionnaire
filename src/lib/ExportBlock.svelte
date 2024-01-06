@@ -1,13 +1,18 @@
 <script lang="ts">
   import { Packer } from "docx";
   import { exportToDoc } from "./document";
-  import { current } from "./store";
+  import { current, shouldRefresh } from "./store";
   import { exportQuestions } from "./util";
 
   let exportBlock: HTMLTextAreaElement;
 
   current.subscribe(() => {
     if (exportBlock) exportBlock.value = "";
+  });
+
+  shouldRefresh.subscribe(() => {
+    if (exportBlock) exportQuestions(exportBlock);
+    $shouldRefresh = false;
   });
 </script>
 
@@ -32,12 +37,6 @@
   ></textarea><br />
 </label>
 <div class="export-buttons">
-  <button
-    on:click="{() => {
-      exportQuestions(exportBlock);
-    }}"
-    disabled="{$current == null}">Refresh</button
-  >
   <button
     on:click="{() => {
       if (exportBlock && exportBlock.value.length > 0) {
