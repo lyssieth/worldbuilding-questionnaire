@@ -12,7 +12,6 @@
   ) => void;
 
   let qChanged = false;
-  const { type, placeholder } = question;
 
   const rows = {
     short: 4,
@@ -86,34 +85,31 @@
         ><EditableText bind:value="{question.question}" />
         <slot /></QuestionTitle
       >
-      {#if type === "textarea"}
-        {@const { length } = question}
-        <textarea
-          data-flub="{question.placeholder}"
-          on:change="{onChange}"
-          class="answer"
-          rows="{rows[length ?? 'medium']}"
-          {placeholder}
-        ></textarea>
-      {:else if type === "number"}
-        <input
-          data-flub="{question.placeholder}"
-          on:change="{onChange}"
-          class="answer"
-          type="number"
-          {placeholder}
-        />
-      {:else if type === "text"}
-        {@const { length } = question}
-        <input
-          data-flub="{question.placeholder}"
-          on:change="{onChange}"
-          class="answer"
-          type="text"
-          {placeholder}
-          data-length="{length ?? 'medium'}"
-        />
-      {/if}
+      {#key question.placeholder}
+        {#if question.type === "textarea"}
+          <textarea
+            on:change="{onChange}"
+            class="answer"
+            rows="{rows[question.length ?? 'medium']}"
+            placeholder="{question.placeholder}"
+          ></textarea>
+        {:else if question.type === "number"}
+          <input
+            on:change="{onChange}"
+            class="answer"
+            type="number"
+            placeholder="{question.placeholder}"
+          />
+        {:else if question.type === "text"}
+          <input
+            on:change="{onChange}"
+            class="answer"
+            type="text"
+            placeholder="{question.placeholder}"
+            data-length="{length ?? 'medium'}"
+          />
+        {/if}
+      {/key}
     </label>
   {/if}
 </li>
